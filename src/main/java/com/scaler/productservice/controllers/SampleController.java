@@ -12,7 +12,7 @@
                                @PathVariable("count") int count){
             String output = "";
             for(int i=0; i<count; i++){
-                output = output + "hello " + student_name + "\n";
+                output = output + "hey " + student_name + "\n";
             }
             return output;
         }
