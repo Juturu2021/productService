@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService{
@@ -30,7 +31,16 @@ public class FakeStoreProductService implements ProductService{
 
     @Override
     public List<Product> getAllProduct() {
-        return null;
+        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject(
+            "https://fakestoreapi.com/products",
+                FakeStoreProductDto[].class
+        );
+        //convert List of FakeStoreDto into Product.
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos){
+            products.add(convertFakeStoreProducToProduct(fakeStoreProductDto));
+        }
+        return products;
     }
 
     private Product convertFakeStoreProducToProduct(FakeStoreProductDto fakeStoreProductDto){
