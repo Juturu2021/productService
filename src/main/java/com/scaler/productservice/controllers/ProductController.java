@@ -1,6 +1,7 @@
 package com.scaler.productservice.controllers;
 import java.util.*;
 
+import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,5 +31,15 @@ public class ProductController {
     @GetMapping()
     public List<Product> getAllProducts(){
         return productService.getAllProduct();
+    }
+
+    @GetMapping("/category/{name}")
+    public List<Product> getCategoryByName(@PathVariable("name") String name){
+        return productService.getSingleCategory(name);
+    }
+
+    @GetMapping("/categories")
+    public List<String> getAllCategories(){
+        return productService.getAllCategories();
     }
 }

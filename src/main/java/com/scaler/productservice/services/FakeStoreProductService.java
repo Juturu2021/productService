@@ -3,11 +3,11 @@ package com.scaler.productservice.services;
 import com.scaler.productservice.dtos.FakeStoreProductDto;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService{
@@ -41,6 +41,29 @@ public class FakeStoreProductService implements ProductService{
             products.add(convertFakeStoreProducToProduct(fakeStoreProductDto));
         }
         return products;
+    }
+
+    @Override
+    public List<Product> getSingleCategory(String name) {
+        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/category/" + name,
+                FakeStoreProductDto[].class
+        );
+        //convert List of FakeStoreDto into Product.
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos){
+            products.add(convertFakeStoreProducToProduct(fakeStoreProductDto));
+        }
+        return products;
+    }
+
+    @Override
+    public List<String> getAllCategories() {
+        String[] categories = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/categories",
+                String[].class
+        );
+        return Arrays.asList(categories);
     }
 
     private Product convertFakeStoreProducToProduct(FakeStoreProductDto fakeStoreProductDto){
