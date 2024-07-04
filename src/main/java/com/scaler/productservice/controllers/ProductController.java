@@ -4,10 +4,7 @@ import java.util.*;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -41,5 +38,19 @@ public class ProductController {
     @GetMapping("/categories")
     public List<String> getAllCategories(){
         return productService.getAllCategories();
+    }
+
+    public Product deleteProduct(long id){
+        return null;
+    }
+
+    @PatchMapping("/{id}")
+    public Product updateProduct(@PathVariable("id") long id, @RequestBody Product product){
+        return productService.updateProduct(id, product);
+    }
+
+    @PutMapping("/{id}")
+    public Product replaceProduct(@PathVariable("id") long id, @RequestBody Product product){
+        return productService.replaceProduct(id, product);
     }
 }
