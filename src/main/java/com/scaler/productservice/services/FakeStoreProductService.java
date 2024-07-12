@@ -1,6 +1,7 @@
 package com.scaler.productservice.services;
 
 import com.scaler.productservice.dtos.FakeStoreProductDto;
+import com.scaler.productservice.exceptions.ProductNotFoundException;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import org.springframework.core.PriorityOrdered;
@@ -30,7 +31,9 @@ public class FakeStoreProductService implements ProductService{
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreProductDto.class
         );
-
+        if(fakeStoreProductDto == null){
+            throw new ProductNotFoundException(productId);
+        }
         //convert FakeStoreDto into Product
         return convertFakeStoreProducToProduct(fakeStoreProductDto);
     }
