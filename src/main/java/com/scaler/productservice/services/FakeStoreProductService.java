@@ -3,6 +3,7 @@ package com.scaler.productservice.services;
 import com.scaler.productservice.dtos.FakeStoreProductDto;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -126,6 +127,8 @@ public class FakeStoreProductService implements ProductService{
         Category category = new Category();
         category.setDescription(fakeStoreProductDto.getCategory());
         product.setCategory(category);
+
+        product.setDescription(fakeStoreProductDto.getDescription());
         return product;
     }
 }

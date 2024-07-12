@@ -22,6 +22,7 @@ public class ProductController {
         this.productService = productService;
     }
     ResponseEntity<Product> responseEntity = null;
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long id){
         //call the fake store service to get the products with given ID
@@ -41,9 +42,12 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<Product> getAllProducts(){
-
-        return productService.getAllProduct();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        ResponseEntity<List<Product>> responseEntity = new ResponseEntity<>(
+                productService.getAllProduct(),
+                HttpStatus.OK
+        );
+        return responseEntity;
     }
 
     @GetMapping("/category/{name}")
@@ -73,7 +77,11 @@ public class ProductController {
     }
 
     @PostMapping()
-    public Product postProduct(@RequestBody Product product){
-        return productService.addNewProduct(product);
+    public ResponseEntity<Product> postProduct(@RequestBody Product product){
+        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+                productService.addNewProduct(product),
+                HttpStatus.CREATED
+        );
+        return responseEntity;
     }
 }
