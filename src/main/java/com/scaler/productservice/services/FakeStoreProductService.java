@@ -3,6 +3,7 @@ package com.scaler.productservice.services;
 import com.scaler.productservice.dtos.FakeStoreProductDto;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,21 @@ public class FakeStoreProductService implements ProductService{
 
     @Override
     public Product deleteProduct(long id) {
+        restTemplate.execute("https://fakestoreapi.com/products/" + id,
+                HttpMethod.DELETE, (RequestCallback)null, (ResponseExtractor)null);
         return null;
+    }
+
+    @Override
+    public Product addNewProduct(Product product) {
+        //post a new product
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(product, FakeStoreProductDto.class);
+        HttpMessageConverterExtractor<FakeStoreProductDto> responseExtractor =
+                new HttpMessageConverterExtractor(FakeStoreProductDto.class,
+                        restTemplate.getMessageConverters());
+        FakeStoreProductDto response = restTemplate.execute("https://fakestoreapi.com/products",
+                HttpMethod.POST, requestCallback, responseExtractor);
+        return convertFakeStoreProducToProduct(response);
     }
 
     private Product convertFakeStoreProducToProduct(FakeStoreProductDto fakeStoreProductDto){
@@ -112,6 +127,8 @@ public class FakeStoreProductService implements ProductService{
         Category category = new Category();
         category.setDescription(fakeStoreProductDto.getCategory());
         product.setCategory(category);
+
+        product.setDescription(fakeStoreProductDto.getDescription());
         return product;
     }
 }

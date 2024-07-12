@@ -4,6 +4,9 @@ import java.util.*;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,16 +21,33 @@ public class ProductController {
     public ProductController(ProductService productService){
         this.productService = productService;
     }
+    ResponseEntity<Product> responseEntity = null;
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") long id){
+    public ResponseEntity<Product> getProductById(@PathVariable("id") long id){
         //call the fake store service to get the products with given ID
-        return productService.getSingleProduct(id);
+        try{
+            Product product = productService.getSingleProduct(id);
+            responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
+        }
+        catch(RuntimeException e){
+            responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+//        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+//                productService.getSingleProduct(id),
+//                HttpStatus.OK
+//        );
+        return responseEntity;
     }
 
     @GetMapping()
-    public List<Product> getAllProducts(){
-        return productService.getAllProduct();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        ResponseEntity<List<Product>> responseEntity = new ResponseEntity<>(
+                productService.getAllProduct(),
+                HttpStatus.OK
+        );
+        return responseEntity;
     }
 
     @GetMapping("/category/{name}")
@@ -40,8 +60,10 @@ public class ProductController {
         return productService.getAllCategories();
     }
 
-    public Product deleteProduct(long id){
-        return null;
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable("id") long id){
+
+        return "The product "+ id + " was deleted";
     }
 
     @PatchMapping("/{id}")
@@ -52,5 +74,14 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") long id, @RequestBody Product product){
         return productService.replaceProduct(id, product);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Product> postProduct(@RequestBody Product product){
+        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+                productService.addNewProduct(product),
+                HttpStatus.CREATED
+        );
+        return responseEntity;
     }
 }
