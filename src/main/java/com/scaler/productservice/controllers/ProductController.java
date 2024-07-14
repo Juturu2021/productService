@@ -19,6 +19,7 @@ public class ProductController {
     private ProductService productService;
 
     public ProductController(ProductService productService){
+
         this.productService = productService;
     }
     ResponseEntity<Product> responseEntity = null;
@@ -26,19 +27,23 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long id){
         //call the fake store service to get the products with given ID
-        try{
-            Product product = productService.getSingleProduct(id);
-            responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
-        }
-        catch(RuntimeException e){
-            responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        }
+//        try{
+//            Product product = productService.getSingleProduct(id);
+//            responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
+//        }
+//        catch(RuntimeException e){
+//            responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//        }
 //        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
 //                productService.getSingleProduct(id),
 //                HttpStatus.OK
 //        );
-        return responseEntity;
+        ResponseEntity<Product> response = new ResponseEntity<>(
+                productService.getSingleProduct(id),
+                HttpStatus.OK
+        );
+        return response;
     }
 
     @GetMapping()

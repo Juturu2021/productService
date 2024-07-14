@@ -15,6 +15,5 @@ public class RestTemplateConfig {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return new RestTemplate(factory);
-
     }
 }
