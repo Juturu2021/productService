@@ -10,8 +10,8 @@ public interface ProductService {
     List<Product> getAllProduct();
     List<Product> getSingleCategory(String name);
     List<String> getAllCategories();
-    Product updateProduct(long id, Product product);
-    Product replaceProduct(long id, Product product);
-    Product deleteProduct(long id);
+    Product updateProduct(Long id, Product product);
+    Product replaceProduct(Long id, Product product);
+    void deleteProduct(Long id);
     Product addNewProduct(Product product);
 }
