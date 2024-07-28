@@ -12,7 +12,7 @@ public class Product extends BaseModel{
     private String title;
     private String description;
     private Double price;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Category category;
     private String image;
 
